@@ -18,7 +18,7 @@ int ft_cd(char **av, int i)
 {
     if (i != 2)
         return (ft_error("error: cd: bad arguments"));
-    if (chdir(av[1]))
+    else if (chdir(av[1]))
         return (ft_error("error: cd: cannot change directory to ") && ft_error(av[1]) && ft_error("\n"));
     return (1);
 }
@@ -30,7 +30,7 @@ int ft_execute(char **av, char **env, int i)
     int fd[2];
 
     if (av[i] && !strcmp(av[i], "|"))
-        pip = 1;
+        pip = 1;    
     if (pip && pipe(fd) == -1)
         return (ft_error("error: fatal\n"));
     pid = fork();
@@ -42,7 +42,7 @@ int ft_execute(char **av, char **env, int i)
         if (pip && (dup2(fd[1], 1) == -1 || close(fd[1]) == -1 || close(fd[0]) == -1))
             return (ft_error("error: fatal\n"));
         execve(av[0], av, env);
-            return (ft_error("error: cannot execute ") && ft_error(av[0]) && ft_error("\n"));
+        return (ft_error("error: cannot execute ") && ft_error(av[0]) && ft_error("\n"));
     }
     if (pip && (dup2(fd[0], tmp) == -1 || close(fd[0]) == -1 || close(fd[1]) == -1))
         return (ft_error("error: fatal\n"));
